@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/home", viewController.getHome);
 
+router.use(authController.protect);
 router.use(authController.restrictTo("admin"));
 
 router.get("/admin", viewController.getAdmin);

@@ -7,15 +7,17 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
-
+const bodyParser = require("body-parser");
 const app = express();
 
 const userRouter = require("./routes/userRoutes");
 const viewRouter = require("./routes/viewRoutes");
+const geoRouter = require("./routes/geoRoutes");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use(bodyParser.urlencoded({ extended: true }));
 //Development  logging
 app.use(morgan("dev"));
 
@@ -48,6 +50,7 @@ app.use((req, res, next) => {
 
 //ROUTES (Mounting)
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/geodata", geoRouter);
 app.use("/api/v1", viewRouter);
 //SECURITY HTTP HEADERS
 

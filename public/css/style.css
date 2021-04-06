@@ -1,5 +1,14 @@
 #map {
-  height: 25rem;
+  height: 34rem;
+}
+
+nav {
+  width: 70%;
+  margin: auto;
+}
+
+.form-group {
+  padding: 0.4rem;
 }
 
 .form-control {
@@ -12,7 +21,6 @@
   padding-right: 16px;
   border-bottom: 1px solid #dfe3e8;
   border-radius: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 .navbar .navbar-brand {
   font-weight: 400;
@@ -37,4 +45,48 @@
   right: 0;
   font-size: 14px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 1px 1px rgba(0, 0, 0, 0.23);
+}
+label {
+  margin: 0;
+}
+.form-group {
+  margin: 0;
+}
+
+.bigboi {
+  width: 70%;
+  margin: auto;
+}
+
+.leaflet-container .leaflet-control-mouseposition {
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 5px #bbb;
+  padding: 0 5px;
+  margin: 0;
+  color: #333;
+  font: 11px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.table--70--mxauto {
+  width: 70%;
+  margin: auto;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  animation: visible 1.5s;
+}
+
+@keyframes visible {
+  0% {
+    opacity: 0;
+    transform: translateX(-800px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 }

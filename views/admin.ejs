@@ -1,1 +1,147 @@
-ADMIN VIEW
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Leaflet Css-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <!--Leaflet Js-->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/L.Control.MousePosition.js"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>GIS</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a href="#" class="navbar-brand">Mega<b>Willys</b></a> 
+      <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+          <div class="navbar-nav">		
+          <form class="navbar-form form-inline">
+              </div>
+          </form>
+          <div class="navbar-nav action-buttons ml-auto">
+              <button class="btn btn-danger btn-block" type="submit" onclick="logout()">Logout</button>		
+          </div>
+      </div>
+  </nav>
+    <div class="bigboi">
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-xl-8">
+          <div id="map" class="mt-4"></div>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-xl-4">
+          <p id="success" class="text-success"></p>
+          <div>
+              <h1>Lägg till en Willysbutik</h1>
+              <div class="form-group">
+                  <label for="name">Longitud</label>
+                  <input class="form-control" id="longitud" readonly type="text" name="longitud">
+              </div>
+              <div class="form-group">
+                  <label for="name">Latitud</label>
+                  <input class="form-control" id="latitud" readonly type="text" name="latitud">
+              </div>
+                <div class="form-group">
+                  <label for="name">Butiksnamn</label>
+                  <input class="form-control" id="name" type="text" name="name">
+                </div>
+                <div class="form-group">
+                  <label for="openHours">Öppettider</label>
+                  <input class="form-control" id="openHours" type="text" name="openHours">
+                </div>
+                <div class="form-group">
+                  <label for="storeUrl">Butiksida</label>
+                  <input class="form-control" id="storeUrl" type="text" name="storeUrl">
+                </div>
+                <div class="form-group">
+                  <label for="photo">Bild Url</label>
+                  <input class="form-control" id="photo" type="text" name="photo">
+                </div>
+                <button class="btn btn-danger mt-2 ml-2" onclick="addLocation()">Lägg till butik</button>
+                <button class="btn btn-danger mt-2 ml-2" id="showTableBtn" onclick="showTable()">Hantera butiker</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive py-5 table--70--mxauto visibleClass" id="myTable">
+      <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Butiksnamn</th>
+            <th>Longitud</th>
+            <th>Latitud</th>
+            <th>Öppettider</th>
+            <th>Butikssida</th>
+            <th>Bild</th>
+            <th>Hantera</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (var i =0; i <geoData.length;  i++ ) { %>
+          <tr>
+            <th scope="row"><%= geoData[i].id %></th>
+            <td> <%= geoData[i].name %></td>
+            <td><%= geoData[i].location.coordinates[0] %></td>
+            <td><%= geoData[i].location.coordinates[1] %></td>
+            <td><%= geoData[i].openHours %></td>
+            <td><a href="<%= geoData[i].storeUrl %>"><%= geoData[i].storeUrl %></a></td>
+            <td><img src="<%= geoData[i].photo %>" class="img-thumbnail"></td>
+            <td><button class="btn btn-danger" class="btn btn-primary" data-toggle="modal" data-target="#hanteraModal<%= geoData[i].id %>">Hantera</button></td>
+            <!--  MODAL  -->
+            <div class="modal fade" id="hanteraModal<%= geoData[i].id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><%= geoData[i].name %></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="<%= geoData[i].id %>">
+                      <div class="form-group">
+                        <label for="name">Butiksnamn</label>
+                        <input type="text" class="form-control" name="name" id="name<%= geoData[i].id %>" value="<%= geoData[i].name %>">
+                      </div>
+                        <div class="form-group">
+                          <label for="openHours">Öppettider</label>
+                          <input type="text" class="form-control" name="openHours" id="openHours<%= geoData[i].id %>" value="<%= geoData[i].openHours %>">
+                        </div>
+                        <div class="form-group">
+                          <label for="storeUrl">Butikslänk</label>
+                          <input type="text" class="form-control" name="storeUrl" id="storeUrl<%= geoData[i].id %>" value="<%= geoData[i].storeUrl %>">
+                        </div>
+                        <div class="form-group">
+                          <label for="photo">Omslag</label>
+                          <input type="text" class="form-control" name="photo" id="photo<%= geoData[i].id %>" value="<%= geoData[i].photo %>">
+                        </div>  
+                        <div class="form-group">
+                          <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="updateGeo('<%= geoData[i].id %>')">Uppdatera</button>
+                          <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="deleteStore('<%= geoData[i].id %>')">Ta bort butik</button>
+                        </div>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <% } %>
+            
+            
+          </tr>
+        </tbody>
+      </table>
+    </div> 
+  <script src="/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
+
