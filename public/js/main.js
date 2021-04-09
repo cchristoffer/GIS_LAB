@@ -56,7 +56,7 @@ const login = async (email, password) => {
     });
     if (res.data.status === "success") {
       window.setTimeout(() => {
-        location.assign("/api/v1/admin");
+        location.assign("/admin");
       }, 1500);
     }
   } catch (err) {
@@ -74,9 +74,11 @@ if (loginForm)
     login(email, password);
   });
 
+let layerControl;
 var mymap = L.map("map").setView([60.48638, 15.41533], 15);
 L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
   maxZoom: 16,
+  layers: [layerControl],
 }).addTo(mymap);
 
 L.control.mousePosition().addTo(mymap);
@@ -119,7 +121,12 @@ async function addMarkers(locations) {
         locations[i].location.coordinates[0] +
         "," +
         locations[i].location.coordinates[1] +
-        ')">Hitta busshållsplats!</button>'
+        ')">Hitta hållplats!</button>' +
+        '<br><button class="btn btn-danger mt-1" onclick="getLocalInsights(' +
+        locations[i].location.coordinates[0] +
+        "," +
+        locations[i].location.coordinates[1] +
+        ')">Hotell i närheten</button>'
     );
   }
 }
@@ -140,7 +147,7 @@ function addBusStops(lat, lng) {
         });
         let marker = L.marker([element.lat, element.lon], {
           icon: busIcon,
-        }).addTo(mymap);
+        });
         marker.on("click", (e) => {
           let deptTime = "";
           $.getJSON(
@@ -166,9 +173,68 @@ function addBusStops(lat, lng) {
             }
           );
         });
+        bussStops.addLayer(marker);
       });
+
+      addLayers();
     }
   );
+}
+
+let hotels = L.layerGroup();
+let bussStops = L.layerGroup();
+
+function getLocalInsights(lat, lon) {
+  let hotelIcon = L.icon({
+    iconUrl:
+      "https://lh3.googleusercontent.com/proxy/9C0tpK90fX6dF9UaJ69gTyyKS0uzrBBtrQ_3_gYm_5GZ0hffFccuXxjRC08_lTVRZJOq0t4cwHH932hP0gEBjMCWNVulqIO1d_CgIsroPhc",
+    iconSize: [50, 50],
+  });
+  $.getJSON(
+    `http://dev.virtualearth.net/REST/v1/Routes/LocalInsights?waypoint=${[
+      lat,
+      lon,
+    ]}&maxTime=15&timeUnit=minute&type=HotelsAndMotels&key=AmJA0CkI1piCN3h6JkEuiNRzZt_Jqqw_pvekGJd5GD15Aa6nZeLhDI5O9ydhB65I`,
+    (data) => {
+      $.each(
+        data.resourceSets[0].resources[0].categoryTypeResults[0].entities,
+        (idx, element) => {
+          let newMarker = L.marker([element.latitude, element.longitude], {
+            icon: hotelIcon,
+          });
+          newMarker.bindPopup("<h5>" + element.entityName + "</h5>");
+          hotels.addLayer(newMarker);
+        }
+      );
+      addLayers();
+    }
+  );
+}
+
+function addLayers() {
+  if (!isEmpty(hotels._layers)) {
+    if (!isEmpty(bussStops._layers)) {
+      var overlays = {
+        Hotell: hotels,
+        Busshållsplatser: bussStops,
+      };
+    } else {
+      var overlays = {
+        Hotell: hotels,
+      };
+    }
+  } else if (!isEmpty(bussStops._layers)) {
+    var overlays = {
+      Busshållsplatser: bussStops,
+    };
+  }
+
+  if (layerControl != null) layerControl.remove(mymap);
+  layerControl = L.control.layers(null, overlays).addTo(mymap);
+}
+
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
 }
 
 mymap.on("click", function (e) {
@@ -208,7 +274,7 @@ async function logout() {
     });
     if ((res.data.status = "success")) {
       window.setTimeout(() => {
-        location.assign("/api/v1/home");
+        location.assign("/home");
       }, 1500);
     }
   } catch (err) {

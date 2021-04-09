@@ -1,4 +1,3 @@
-/* eslint-disable import/no-useless-path-segments */
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
@@ -38,7 +37,6 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    console.log(req.body);
     const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",
@@ -69,7 +67,6 @@ exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.find();
 
-    // SEND RESPONSE
     res.status(200).json({
       status: "success",
       results: doc.length,

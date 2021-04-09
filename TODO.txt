@@ -1,47 +1,33 @@
-GEO-OBJEKT:
-    -Butiksnamn [x]
-    -öppettider [x]
-    -bild [x]
-    -väderinfo (API) [x]
-    -busshållsplatser(API) [x]
-    -ATTRIBUT(tredjeparts API, valde polisens api för brottshändelser) [x]
+* 7 nya locations. [X]
+* Bing local insights [X]
+* URL för viewcontroller [X]
+* Postman doc [X]
+* Göra powerpoint [X]
+FRONTEND
+- axios [X]
+- leaflet maps [X]
+- api calls [X]
+BACKEND
+- JWT [X]
+- REST API [X]
+- MVC [X]
+- Mongoose (som jpa) [X]
+- FactoryController [X]
+- Global error handling [X]
 
-ÖVRIGT:
-    -Skippa grötighet [x]
-    -valfritt leaflet plugin []
+*Layers med checkboxes []
 
-VG:
-    -ADMIN [X]
-    -CRUD(ADMIN) []
+*Spela in redovisning []
 
-Som admin/användare vill jag kunna logga in med postman [X]
-Register/Login för användare [X]
-Skapa modell för GEO-OBJEKT [x]
-Controller för CRUD-operationer GEO[]
-Skapa views för user/admin [x]
-
-http://api.openweathermap.org/data/2.5/weather?lat=latVariable&lon=lonVariable&appid=582e149fb362e1b98b83ade7442b13a2
-
-{
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Willys AB",
-        "url" : "willys.se",
-        "open": "08-21",
-        "bild": "https://lh5.googleusercontent.com/p/AF1QipOshbUTKjfw7cBtrtzJR4d5Qm8EFLsqzbtQV8P3=w408-h306-k-no"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          [
-              15.414606928825378,
-              60.48699534842147
-          ]
-        ]
-      }
-    }
-  ]
-}
+För- och efternamn på gruppmedlemmar.
+ Vilket betyg ni gör för.
+ En kort bakgrund till inlämningsuppgiften, vad du skulle göras.
+ Arbetsfördelning i gruppen, vem som gjort vad.
+ Ge en övergripande visuellbild av er applikation genom att använda olika UML diagram
+förenklar förståelsen av er gjorda kart app.
+ Nyckelfunktionalitet i systemet.
+ Vilka problem du har stött på och deras lösningar
+ Vad gick bra? Vad behöver förbättras?
+ Vilka kunskaper, lärdomar och insikter tas med in i framtida projekt baserat på erfarenheter
+från detta projekt.
+ Avsluta med en live demo av kartappen som visar att ni uppfyller kraven.

@@ -29,9 +29,9 @@ const limiter = rateLimit({
 });
 app.use("/api", limiter);
 
-//Body parser, reading data from body into req.body
 app.use(express.json({ limit: "80kb" }));
 app.use(cookieParser());
+
 //Data sanitization against NoSQL query injection
 //looks at req.body, query and param. Filters out $ and dots (.)
 app.use(mongoSanitize());
@@ -51,15 +51,13 @@ app.use((req, res, next) => {
 //ROUTES (Mounting)
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/geodata", geoRouter);
-app.use("/api/v1", viewRouter);
-//SECURITY HTTP HEADERS
+app.use("/", viewRouter);
 
 //Error for unkown routes
 app.all("*", (req, res, next) => {
   next(new AppError(`Can´t find ${req.originalUrl} on this server!`, 404));
 });
 
-//Obscures error data for unknown/programming errors with generic messages and detailed messages for operational errors.
 app.use(globalErrorHandler);
 
 module.exports = app;
